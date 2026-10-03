@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "novel-agent"
+version = "0.1.0"
+description = "Local-first Project-driven novel collaboration agent and CLI"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "pydantic>=2.11,<3",
+    "python-dotenv>=1.1,<2",
+]
+
+[project.optional-dependencies]
+agent = [
+    "deepagents>=0.7.19,<0.8",
+    "langgraph>=1",
+    "langchain-openai>=1",
+    "langgraph-checkpoint-sqlite>=3",
+    "pypdf>=6,<7",
+]
+cli = ["prompt-toolkit>=3.0", "rich>=14"]
+
+[dependency-groups]
+dev = ["pytest>=8.4,<10", "ruff>=0.12"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/novel_agent"]
+
+[tool.uv]
+cache-dir = ".uv-cache"
+python-preference = "only-system"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration"]
+addopts = "-ra"
+markers = ["real_llm: calls a configured external model"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
